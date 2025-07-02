@@ -34,12 +34,24 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Session middleware - gunakan connect-pg-simple jika production
+// Session middleware - gunakan connect-pg-simple
+const pgSession = require("connect-pg-simple")(session);
+
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "google_sso_session_secret",
+    store: new pgSession({
+      pool: db.pool,
+      tableName: "session",
+    }),
+    secret: process.env.SESSION_SECRET || "rahasia_session",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      secure: process.env.NODE_ENV === "production", // true kalau HTTPS
+      httpOnly: true,
+      sameSite: "none", // penting kalau frontend beda domain
+    },
   })
 );
 
@@ -84,5 +96,4 @@ app.get("/env", (req, res) => {
   });
 });
 
-// Export app
 module.exports = app;

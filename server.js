@@ -1,11 +1,10 @@
 const app = require("./src/index");
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || "0.0.0.0"; // ← tambahkan ini
+const HOST = "0.0.0.0";
 
 app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running on http://${HOST}:${PORT}`);
 });
-
 // Global error handler
 app.use((err, req, res, next) => {
   console.error("🚨 Global Error:", err.stack);
