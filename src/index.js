@@ -55,6 +55,7 @@ app.use("/api/ruang", ruangRoutes);
 
 // ✅ Default route untuk health check Railway
 app.get("/", (req, res) => {
+  console.log("🎯 / accessed");
   res.status(200).json({
     status: "OK",
     message: "API Kuesioner is running...",
@@ -62,7 +63,16 @@ app.get("/", (req, res) => {
   });
 });
 
-// ✅ Test DB endpoint
+app.get("/env", (req, res) => {
+  console.log("🎯 /env accessed");
+  const { PORT, NODE_ENV, DATABASE_URL } = process.env;
+  res.json({
+    PORT,
+    NODE_ENV,
+    DATABASE_URL: !!DATABASE_URL,
+  });
+});
+
 app.get("/test-db", async (req, res) => {
   try {
     const { rows } = await db.query("SELECT NOW()");
@@ -71,16 +81,6 @@ app.get("/test-db", async (req, res) => {
     console.error("Database error:", err.message);
     res.status(500).json({ status: "error", message: err.message });
   }
-});
-
-// ✅ Optional: test env variables
-app.get("/env", (req, res) => {
-  const { PORT, NODE_ENV, DATABASE_URL } = process.env;
-  res.json({
-    PORT,
-    NODE_ENV,
-    DATABASE_URL: !!DATABASE_URL,
-  });
 });
 
 module.exports = app;
