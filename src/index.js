@@ -67,6 +67,15 @@ app.get("/test-db", async (req, res) => {
   }
 });
 
+app.get("/env", (req, res) => {
+  const { PORT, NODE_ENV, DATABASE_URL } = process.env;
+  res.json({
+    PORT,
+    NODE_ENV,
+    DATABASE_URL: !!DATABASE_URL,
+  });
+});
+
 // 🚫 JANGAN JALANKAN SERVER DI SINI
 // app.listen(...) dipindahkan ke server.js
 module.exports = app;
