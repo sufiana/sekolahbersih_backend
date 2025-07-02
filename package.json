@@ -1,9 +1,10 @@
 {
   "name": "express-kuesioner-api",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node server.js",
+    "build": "echo 'No frontend build needed'"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
