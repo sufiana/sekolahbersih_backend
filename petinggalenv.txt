@@ -16,7 +16,8 @@ DB_NAME=sekolah_bersih
 
 JWT_SECRET=b19590657dada1dcbe0cfb2ba8999f5942e476473833207840eb25c0e9251ba9
 
-
+GOOGLE_CLIENT_ID=690445955673-9j53jqbu1f708dvm837j2vca99rfvb8g.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
 GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
 
 
