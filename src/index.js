@@ -8,49 +8,36 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
 
-// Import routes
+// ✅ Import db
+const { pool } = require("./config/db"); // <-- penting!
+
+// Routes
 const authRoutes = require("./routes/authRoutes");
 const parameterRoutes = require("./routes/parameterRoutes");
 const kuesionerRoutes = require("./routes/kuesionerRoutes");
 const ruangRoutes = require("./routes/ruangRoutes");
 
-// Inisiasi app
 const app = express();
 
-// ✅ Middleware harus diurutan benar
+// Middleware setup...
 
-// CORS middleware - paling atas
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL_DEV || "http://localhost:3001",
-    credentials: true,
-  })
-);
-
-// Cookie parser
-app.use(cookieParser());
-
-// Body parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Session middleware - gunakan connect-pg-simple
+// ✅ Session middleware dengan PostgreSQL
 const pgSession = require("connect-pg-simple")(session);
 
 app.use(
   session({
     store: new pgSession({
-      pool: db.pool,
+      pool: pool, // ✅ Gunakan pool yang sudah di-import
       tableName: "session",
     }),
     secret: process.env.SESSION_SECRET || "rahasia_session",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      secure: process.env.NODE_ENV === "production", // true kalau HTTPS
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: "none", // penting kalau frontend beda domain
+      sameSite: "none",
     },
   })
 );
